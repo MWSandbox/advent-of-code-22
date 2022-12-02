@@ -1,55 +1,35 @@
 package main
 
 import (
-	"bufio"
+	"advent-of-code/shared"
 	"fmt"
 	"log"
-	"os"
 	"sort"
 	"strconv"
 )
 
+var totalCalories []int
+var currentCalories int = 0
+
 func main() {
-	file := openFile("./input.txt")
-	totalCalories := readCaloriesFromFile(file)
+	file := shared.OpenFile("./input.txt")
+	shared.ReadFileLineByLine(file, calculateCalories)
 	printOutNHighestCalories(totalCalories, 3)
 }
 
-func openFile(filePath string) *os.File {
-	file, err := os.Open(filePath)
+func calculateCalories(line string) {
 
-	if err != nil {
-		log.Fatal(err)
-	}
-	return file
-}
+	if line == "" {
+		totalCalories = append(totalCalories, currentCalories)
+		currentCalories = 0
+	} else {
+		caloriesAsInt, err := strconv.Atoi(line)
+		currentCalories += caloriesAsInt
 
-func readCaloriesFromFile(file *os.File) []int {
-	scanner := bufio.NewScanner(file)
-	var currentCalories int = 0
-	var totalCalories []int
-
-	for scanner.Scan() {
-
-		var currentLine string = scanner.Text()
-
-		if currentLine == "" {
-			totalCalories = append(totalCalories, currentCalories)
-			currentCalories = 0
-		} else {
-			caloriesAsInt, err := strconv.Atoi(currentLine)
-			currentCalories += caloriesAsInt
-
-			if err != nil {
-				log.Fatal("Could not parse int: ")
-			}
+		if err != nil {
+			log.Fatal("Could not parse int: ")
 		}
 	}
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-	return totalCalories
 }
 
 func printOutNHighestCalories(totalCalories []int, n int) {
