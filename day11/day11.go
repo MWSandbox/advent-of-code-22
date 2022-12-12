@@ -12,7 +12,7 @@ import (
 type WorryLevelIncreaser func(int, int) (int)
 
 type Monkey struct {
-	items []uint64
+	items []int
 	operationParts []string
 	divisor int
 	nextMonkeyOnTrue int
@@ -23,7 +23,7 @@ type Monkey struct {
 const startingItemsIdLength int = 14
 const operationIdLength int = 9
 const oldWorryLevelId string = "old"
-const worryLevelReducer int = 1
+const worryLevelReducer int = 9699690
 const rounds int = 10000
 
 var indexToMonkey map[int]*Monkey = make(map[int]*Monkey)
@@ -57,7 +57,7 @@ func parseMonkeyState(line string) {
 	} else if isStartingItems {
 		itemsAsString := strings.Split(trimmedLine[startingItemsIdLength+2:len(trimmedLine)], ", ")
 		if itemsAsString != nil {
-			var items []uint64
+			var items []int
 			for i := 0; i < len(itemsAsString); i++ {
 				item, err := strconv.Atoi(itemsAsString[i])
 
@@ -131,7 +131,7 @@ func addValues(value1 int, value2 int) int {
 }
 
 func playMonkeyGame() {
-	var inspectedItemCounts []uint64
+	var inspectedItemCounts []int
 	monkeyIndices := reflect.ValueOf(indexToMonkey).MapKeys()
 	totalMonkeys := len(monkeyIndices)
 
@@ -149,9 +149,11 @@ func playMonkeyGame() {
 	mostActive := inspectedItemCounts[len(inspectedItemCounts)-1]
 	secondMostActive := inspectedItemCounts[len(inspectedItemCounts)-2]
 
+	var monkeyBusiness uint64 = uint64(mostActive) * uint64(secondMostActive)
+
 	fmt.Println("Most active: " + strconv.Itoa(mostActive))
 	fmt.Println("Second most active: " + strconv.Itoa(secondMostActive))
-	fmt.Println("Monkey business: " + strconv.Itoa(mostActive * secondMostActive))
+	fmt.Println("Monkey business: " + strconv.FormatUint(monkeyBusiness, 10))
 }
 
 func playOneRound(totalMonkeys int) {
@@ -163,7 +165,7 @@ func playOneRound(totalMonkeys int) {
 			fmt.Println("  Monkey inspects an item with a worry level of " + strconv.Itoa(currentItem) + ".")
 			currentItem = executeOperation(currentItem, indexToMonkey[i].operationParts)
 			fmt.Println("  Worry level of item increased to " + strconv.Itoa(currentItem) + ".")
-			currentItem = currentItem / worryLevelReducer
+			currentItem = currentItem % worryLevelReducer
 			fmt.Println("  Worry level is reduced to " + strconv.Itoa(currentItem) + ".")
 
 			if currentItem % indexToMonkey[i].divisor == 0 {
