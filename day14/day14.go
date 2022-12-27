@@ -148,36 +148,10 @@ func moveFallinSandTo(startPosX int, startPosY int, endPosX int, endPosY int) {
 }
 
 func printCave() {
-	xHeader1 := "    "
-	xHeader2 := "    "
-	xHeader3 := "    "
-
-	for x := minX; x < maxX; x++ {
-		firstDigit := x / 100
-		secondDigit := (x % 100) / 10
-		thirdDigit := x % 10
-
-		xHeader1 += strconv.Itoa(firstDigit)
-		xHeader2 += strconv.Itoa(secondDigit)
-		xHeader3 += strconv.Itoa(thirdDigit)
-	}
-
-	fmt.Println(xHeader1)
-	fmt.Println(xHeader2)
-	fmt.Println(xHeader3)
+	shared.PrintXHeader(minX, maxX)
 
 	for y := 0; y < maxY-minY; y++ {
-		padding := " "
-
-		if y < 10 {
-			padding += " "
-		}
-
-		if y < 100 {
-			padding += " "
-		}
-
-		var printedLine string = strconv.Itoa(y) + padding
+		var printedLine string = strconv.Itoa(y) + shared.GetYPadding(y)
 		for x := 0; x < maxX-minX; x++ {
 			printedLine += string(cave[x][y])
 		}
