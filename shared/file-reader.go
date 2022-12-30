@@ -2,8 +2,10 @@ package shared
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"os"
+	"strconv"
 )
 
 type parserFn func(string)
@@ -28,4 +30,15 @@ func ReadFileLineByLine(file *os.File, parser parserFn) {
 		log.Fatal(err)
 	}
 	defer file.Close()
+}
+
+func ConvertStringToInt(value string) int {
+	intValue, err := strconv.Atoi(value)
+
+	if err != nil {
+		fmt.Println("Couldn't convert string value to int: " + value)
+		return 0
+	}
+
+	return intValue
 }
