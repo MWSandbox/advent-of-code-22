@@ -11,9 +11,9 @@ func PrintXHeader(minX int, maxX int) {
 	xHeader3 := "    "
 
 	for x := minX; x < maxX; x++ {
-		firstDigit := abs(x) / 100
-		secondDigit := (abs(x) % 100) / 10
-		thirdDigit := abs(x) % 10
+		firstDigit := Abs(x) / 100
+		secondDigit := (Abs(x) % 100) / 10
+		thirdDigit := Abs(x) % 10
 
 		xHeader1 += strconv.Itoa(firstDigit)
 		xHeader2 += strconv.Itoa(secondDigit)
@@ -28,20 +28,13 @@ func PrintXHeader(minX int, maxX int) {
 func GetYPadding(y int) string {
 	padding := " "
 
-	if abs(y) < 10 {
+	if Abs(y) < 10 {
 		padding += " "
 	}
 
-	if abs(y) < 100 {
+	if Abs(y) < 100 {
 		padding += " "
 	}
 
 	return padding
-}
-
-func abs(value int) int {
-	if value < 0 {
-		return -value
-	}
-	return value
 }
