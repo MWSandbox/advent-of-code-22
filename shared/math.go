@@ -18,3 +18,7 @@ func Max(values ...int) int {
 
 	return max
 }
+
+func IsInRange(value int, min int, max int) bool {
+	return value >= min && value <= max
+}
