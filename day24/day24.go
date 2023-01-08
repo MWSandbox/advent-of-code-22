@@ -150,7 +150,7 @@ func isNextToTarget() bool {
 }
 
 func addPath(paths []*Path, oldPath *Path, x int, y int) []*Path {
-	hashValue := cantorHashMinutesAndPos(len(oldPath.positions)+1, &Position{x: x, y: y})
+	hashValue := shared.CantorHashThreeFields(len(oldPath.positions)+1, x, y)
 
 	if minutesAndPosHashesToIsVisited[hashValue] {
 		return paths
@@ -344,12 +344,4 @@ func getBlizzardForPos(x int, y int) []*Blizzard {
 	}
 
 	return blizzardsOnPos
-}
-
-func cantorHashMinutesAndPos(minutes int, pos *Position) int {
-	return (cantorHashPos(pos)+minutes)*(cantorHashPos(pos)+minutes+1)/2 + minutes
-}
-
-func cantorHashPos(pos *Position) int {
-	return (pos.x+pos.y)*(pos.x+pos.y+1)/2 + pos.y
 }

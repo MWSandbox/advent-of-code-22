@@ -55,7 +55,20 @@ func (priorityQueue *PriorityQueue) update(item *Item, value *GraphNode, priorit
 	heap.Fix(priorityQueue, item.index)
 }
 
-func Dijkstra(allNodes []*GraphNode, startNode *GraphNode, endNode *GraphNode) int {
+func DijkstraWithMultiStart(allNodes []*GraphNode, startNodes []*GraphNode, endNode *GraphNode) int {
+	shortestPath := infinity
+
+	for i := 0; i < len(startNodes); i++ {
+		result := Dijkstra(allNodes, startNodes[i], endNode)
+
+		if result < shortestPath {
+			shortestPath = result
+		}
+	}
+	return shortestPath
+}
+
+func DijkstraWithLimit(allNodes []*GraphNode, startNode *GraphNode, endNode *GraphNode, limit int) int {
 	nodeToDistance := initializeDistances(allNodes, startNode)
 
 	priorityQueue := make(PriorityQueue, len(allNodes))
@@ -68,6 +81,10 @@ func Dijkstra(allNodes []*GraphNode, startNode *GraphNode, endNode *GraphNode) i
 	for priorityQueue.Len() > 0 {
 		item := heap.Pop(&priorityQueue).(*Item)
 
+		if item.priority > limit {
+			return infinity
+		}
+
 		for i := 0; i < len(item.value.Neighbors); i++ {
 			neighborItem := getItemFromQueue(priorityQueue, item.value.Neighbors[i])
 
@@ -78,6 +95,10 @@ func Dijkstra(allNodes []*GraphNode, startNode *GraphNode, endNode *GraphNode) i
 	}
 
 	return nodeToDistance[endNode]
+}
+
+func Dijkstra(allNodes []*GraphNode, startNode *GraphNode, endNode *GraphNode) int {
+	return DijkstraWithLimit(allNodes, startNode, endNode, infinity)
 }
 
 func initializeDistances(allNodes []*GraphNode, startNode *GraphNode) map[*GraphNode]int {
